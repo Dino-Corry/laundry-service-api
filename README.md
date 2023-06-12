@@ -1,6 +1,6 @@
-# Title: Laundry Service API
+# Laundry Service API
 
-## Description: The Laundry Service API is a PHP-based API that provides functionality for a laundry service application. It includes features such as user authentication (signup, login, forgot password, reset password), handling pickup requests, checking item status, and administrative actions like approving pickup requests. The API utilizes MongoDB as the database for storing user and request information. It also integrates with the PHPMailer library for sending email notifications to users.
+#### The Laundry Service API is a PHP-based API that provides functionality for a laundry service application. It includes features such as user authentication (signup, login, forgot password, reset password), handling pickup requests, checking item status, and administrative actions like approving pickup requests. The API utilizes MongoDB as the database for storing user and request information. It also integrates with the PHPMailer library for sending email notifications to users.
 
 
 
