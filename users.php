@@ -18,17 +18,32 @@ class LaundryServiceAPI{
     }
 
     // User authentication: Signup
-    public function signup($name, $email, $password){
+    // User authentication: Signup
+    public function signup($name, $email, $password, $phone){
+        // Check if the email already exists
+        $existingUser = $this->collection->findOne(['email' => $email]);
+        if ($existingUser) {
+            return [
+                'message' => 'Email already exists',
+            ];
+        }
         $user = [
             'name' => $name,
             'email' => $email,
+            'phone' => $phone,
             'password' => password_hash($password, PASSWORD_DEFAULT),
         ];
 
         $result = $this->collection->insertOne($user);
 
-        return $result->getInsertedId();
+        $userId = $result->getInsertedId();
+
+        return [
+            'userId' => $userId,
+            'message' => 'Signup successful',
+        ];
     }
+
 
     // User authentication: Login
     public function login($email, $password){
@@ -127,43 +142,46 @@ class LaundryServiceAPI{
                 if (isset($pickupRequest['request_number']) && $pickupRequest['request_number'] === $requestNumber) {
                     // Extract the item details
                     $status = $pickupRequest['status'];
-                    $pickupDate = $pickupRequest['pickup_date'];
                     $numberOfItem = $pickupRequest['number_of_item'];
                     $amount = $pickupRequest['amount'];
                     $userEmail = $user['email'];
     
                     // Create the item details array
-                    if ($status == 1) {
-                        $itemDetails = [
-                            'number_of_item' => $numberOfItem,
-                            'amount' => $amount,
-                            'status' => "Your item has been approved for pickup. Dispatch driver will call you for pickup",
-                            'pickup_date' => $pickupDate,
-                            'user_email' => $userEmail
-                        ];
+                    $itemDetails = [
+                        'number_of_item' => $numberOfItem,
+                        'amount' => $amount,
+                        'status' => $status,
+                        'user_email' => $userEmail
+                    ];
+                    return $itemDetails;
+                    // if ($status == 1) {
+                    //     $itemDetails = [
+                    //         'number_of_item' => $numberOfItem,
+                    //         'amount' => $amount,
+                    //         'status' => "Your item has been approved for pickup. Dispatch driver will call you for pickup",
+                    //         'user_email' => $userEmail
+                    //     ];
     
-                        return $itemDetails;
-                    } elseif ($status == 2) {
-                        $itemDetails = [
-                            'number_of_item' => $numberOfItem,
-                            'amount' => $amount,
-                            'status' => "Your item is now ready for delivery, wait for our call",
-                            'pickup_date' => $pickupDate,
-                            'user_email' => $userEmail
-                        ];
+                    //     return $itemDetails;
+                    // } elseif ($status == 2) {
+                    //     $itemDetails = [
+                    //         'number_of_item' => $numberOfItem,
+                    //         'amount' => $amount,
+                    //         'status' => "Your item is now ready for delivery, wait for our call",
+                    //         'user_email' => $userEmail
+                    //     ];
     
-                        return $itemDetails;
-                    } else {
-                        $itemDetails = [
-                            'number_of_item' => $numberOfItem,
-                            'amount' => $amount,
-                            'status' => "Pickup request is still pending",
-                            'pickup_date' => $pickupDate,
-                            'user_email' => $userEmail
-                        ];
+                    //     return $itemDetails;
+                    // } else {
+                    //     $itemDetails = [
+                    //         'number_of_item' => $numberOfItem,
+                    //         'amount' => $amount,
+                    //         'status' => "Pickup request is still pending",
+                    //         'user_email' => $userEmail
+                    //     ];
     
-                        return $itemDetails;
-                    }
+                    //     return $itemDetails;
+                    // }
                 }
             }
         }
@@ -172,10 +190,8 @@ class LaundryServiceAPI{
         return 'Item not found';
     }
 
-
-    // Admin to approve when service is done and ready for delivery
-    //Status 0 == Pending Request, 1 == Your service is in progress.., 2 == Ready for Delivery
-    public function adminHandler($requestNumber, $status){
+    // Admin to Delete request
+    public function adminDeleteRequest($requestNumber){
         $criteria = [
             'pickup_requests.request_number' => $requestNumber,
         ];
@@ -188,15 +204,16 @@ class LaundryServiceAPI{
             $requestFound = false;
     
             // Iterate over pickup requests to find the matching one
-            foreach ($pickupRequests as &$pickupRequest) {
+            foreach ($pickupRequests as $key => $pickupRequest) {
                 // Check if the request number matches
                 if (isset($pickupRequest['request_number']) && $pickupRequest['request_number'] === $requestNumber) {
-                    $pickupRequest['status'] = $status;
+                    // Remove the pickup request from the array
+                    unset($pickupRequests[$key]);
     
                     // Save the modified document
-                    $this->collection->replaceOne(
+                    $this->collection->updateOne(
                         ['_id' => $user['_id']],
-                        $user
+                        ['$set' => ['pickup_requests' => array_values($pickupRequests)]]
                     );
     
                     $requestFound = true;
@@ -205,13 +222,7 @@ class LaundryServiceAPI{
             }
     
             if ($requestFound) {
-                if ($status == 1) {
-                    return "Your item has been approved for pickup. Dispatch driver will call you for pickup";
-                } else if ($status == 2) {
-                    return "Your item is now ready for delivery. Wait for our call";
-                } else {
-                    return "Incorrect value. Value must be 1 or 2";
-                }
+                return "Pickup request deleted successfully";
             } else {
                 return "Request not found";
             }
@@ -219,25 +230,28 @@ class LaundryServiceAPI{
     
         // User not found
         return false;
-    } 
-
+    }
+    
 
     // Make a pickup request
-    public function makePickupRequest($userId, $numberOfItem){
+    public function makePickupRequest($userId, $numberOfItem, $phone, $pickupAddress){
         $user = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectID($userId)]);
 
 
         if ($user) {
             // Create a new pickup request with a tracking code
             $requestNumber = $this->generateRandomToken();
-            $amount = $numberOfItem * 700;
+            $totalCost = $numberOfItem * 700;
+            $cost = "N700";
             $pickupRequest = [
                 'request_number' => $requestNumber,
+                'phone' => $phone,
+                'address' => $pickupAddress,
                 'delivery_date' => '',
                 'number_of_item' => $numberOfItem,
                 'amount' => $numberOfItem * 700,
-                'pickup_date' => date('Y-m-d'),
-                'status' => 'Pickup request sent. Waiting for pickup',
+                'date_created' => date('Y-m-d'),
+                'status' => 'Pickup request sent. Waiting for approval',
             ];
 
             // Add the pickup request to the user's array of requests
@@ -261,12 +275,25 @@ class LaundryServiceAPI{
             
             $mail->Subject = 'Pickup Request Initiated';
             $mail->Body = 'Your request was sent successful with the following details: ' . 
-                'Request Number:' . $requestNumber .
-                'Number of Items:' . $numberOfItem .
-                'Cost Amount: ' . $amount;
+                ' Request Number:' . $requestNumber .
+                ' Address:' . $pickupAddress .
+                ' Contact Number:' . $phone .
+                ' Number of Items:' . $numberOfItem .
+                ' Cost per Item: ' . $cost .
+                ' Total Cost: ' . $totalCost;
             
             if ($mail->send()) {
-                return "Pickup Request Initiated. Please check your mail for details"; 
+                $name = $user['name'];
+                $message = 'Pickup Request Initiated with the following details: <br>' .
+                ' Name: ' . $name . '<br>' .
+                ' Request Number : ' . $requestNumber . '<br>' .
+                ' Address :' . $pickupAddress . '<br>' .
+                ' Contact Number :' . $phone . '<br>' .
+                ' Number of Items :' . $numberOfItem . '<br>' .
+                ' Cost per Item :' . $cost . '<br>' .
+                ' Total Cost :' . 'N'.$totalCost . '<br>' .
+                ' Please check your mail for more details';
+                return $message;
             } else {
                 return false; 
             }
@@ -280,7 +307,8 @@ class LaundryServiceAPI{
     }
 
 
-
+    //Generate random token to reset password
+    //Generate request Number
     private function generateRandomToken($length = 6) {
         $characters = '0123456789ABCDE';
         $token = '';
@@ -290,7 +318,7 @@ class LaundryServiceAPI{
         return $token;
     }
 
-
+    //Handle all end-points
     public function handleRequest($method, $endpoint, $data){
         // echo $endpoint;
         switch ($endpoint) {
@@ -311,29 +339,19 @@ class LaundryServiceAPI{
                     }
                 }
                 break;
-            case '/findAllUsers':
-                if ($method === 'POST') {
-                    $users = $this->findAllUsers();
-                        if ($users) {
-                            // Item found, return the item details
-                            return json_encode($users);
-                        } else {
-                            // Item not found
-                            return 'Item not found';
-                        }
-                }
+            
             case '/makePickupRequest':
                 if ($method === 'POST') {
-                    if (isset($data['userID']) && ($data['numberOfItem'])) { 
+                    if (isset($data['userID']) && ($data['numberOfItem']) && ($data['phone']) && ($data['pickupAddress'])) { 
                         $userId = ($data['userID']);
                         $numberOfItem = ($data['numberOfItem']);
-                        $details = $this->makePickupRequest($userId, $numberOfItem);
+                        $phone = ($data['phone']);
+                        $pickupAddress = ($data['pickupAddress']);
+                        $details = $this->makePickupRequest($userId, $numberOfItem, $phone, $pickupAddress);
                         if ($details) {
-                            // Item found, return the item details
                             return json_encode($details);
                         } else {
-                            // Item not found
-                            return 'Item not found';
+                            return 'Request failed to send';
                         }
                     } else {
                         return 'Missing parameters'; 
@@ -371,16 +389,26 @@ class LaundryServiceAPI{
             case '/signup':
                 if ($method === 'POST') {
                     if (isset($data['name']) && ($data['email']) && ($data['password'])) { 
-                        $name = $data['name'];
                         $email = $data['email'];
-                        $password = $data['password'];
-                        $details = $this->signup($name, $email, $password);
-                        if ($details) {
-                            // Request approved successfully
-                            return 'User registration was successful';
+
+                        // Check if email already exists
+                        $existingUser = $this->collection->findOne(['email' => $email]);
+                        if ($existingUser) {
+                            return 'Email already exists'; // Return error message if email exists
                         } else {
-                            // Request not found or unable to approve
-                            return 'Failed to register';
+                            $name = $data['name'];
+                            $email = $data['email'];
+                            $password = $data['password'];
+                            $phone = $data['phone'];
+                            $details = $this->signup($name, $email, $password, $phone);
+                            if ($details) {
+                                $user_id = $details['userId'];
+                                // Request approved successfully
+                                return "User registration was successful. Your user ID is: $user_id";
+                            } else {
+                                // Request not found or unable to approve
+                                return 'Failed to register';
+                            }
                         }
                     } else {
                         return 'Missing parameters'; 
@@ -413,7 +441,6 @@ class LaundryServiceAPI{
                         if ($p_email) {
                             return 'Forgot password token was sent to your email';
                         } else {
-                            // Request not found or unable to approve
                             return 'Failed to send token';
                         }
                     } else {
@@ -423,7 +450,8 @@ class LaundryServiceAPI{
                 break;
             case '/resetPassword':
                 if ($method === 'POST') {
-                    if (isset($data['email']) && ($data['resetToken']) && ($data['newPassword'])){ 
+                    if ($data['resetToken'] == null) {
+                        if (isset($data['email']) && ($data['resetToken']) && ($data['newPassword'])){ 
                         $email = $data['email'];
                         $resetToken = $data['resetToken'];
                         $newPassword = $data['newPassword'];
@@ -431,12 +459,15 @@ class LaundryServiceAPI{
                         if ($p_email) {
                             return 'You\'ve successfully reset your password ';
                         } else {
-                            // Request not found or unable to approve
-                            return 'Password reset failed';
+                            return 'Password reset failed. Please confirm your Token';
+                        }
+                        } else {
+                            return 'Missing parameters'; 
                         }
                     } else {
-                        return 'Missing parameters'; 
+                        return 'Failed. Please go to forgot password to generate reset token.';
                     }
+                    
                 }
                 break;
                          
