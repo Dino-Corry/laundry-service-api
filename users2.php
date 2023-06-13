@@ -1,8 +1,8 @@
 <?php
+use MongoDB\Client;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php'; 
-require 'config.php';
 
 
 
@@ -11,19 +11,13 @@ class LaundryServiceAPI{
     private $mongoClient;
     private $collection;
 
-    public function __construct($dbName, $usersCollection){
-        // $mongoConnectionString = "mongodb://$mongoHost";
-        // // $mongoConnectionString = "mongodb+srv://essen653:Dino-boy123@cluster0.pckoqai.mongodb.net/laundry_service?retryWrites=true&w=majority";
-        // $this->mongoClient = new Client($mongoConnectionString);
-        $this->mongoClient = server($dbName, $usersCollection); 
-
-        // if ($userCollection =$this->mongoClient->listCollections(["name"=>$usersCollection])) {
-            $this->collection = $this->mongoClient->$usersCollection;            
-        // } else {
-        //     $this->collection = $this->mongoClient->createCollection($usersCollection);
-        // }              
+    public function __construct($mongoHost, $dbName, $usersCollection){
+        $mongoConnectionString = "mongodb://$mongoHost";
+        $this->mongoClient = new Client($mongoConnectionString);
+        $this->collection = $this->mongoClient->$dbName->$usersCollection;
     }
 
+    // User authentication: Signup
     // User authentication: Signup
     public function signup($name, $email, $password, $phone){
         // Check if the email already exists
@@ -314,7 +308,6 @@ class LaundryServiceAPI{
                 if ($method === 'POST') {
                     if (isset($data['name']) && ($data['email']) && ($data['password'])) { 
                         $email = $data['email'];
-                        // die(var_dump($this->mongoClient));
 
                         // Check if email already exists
                         $existingUser = $this->collection->findOne(['email' => $email]);
@@ -401,15 +394,16 @@ class LaundryServiceAPI{
                 return 'Invalid endpoint';
         }
     }
+    //
     
 }
 
 // MongoDB configuration
+$mongoHost = 'localhost';
 $dbName = 'laundry_service';
 $usersCollection = 'users';
 
-
-$api = new LaundryServiceAPI($dbName, $usersCollection);
+$api = new LaundryServiceAPI($mongoHost, $dbName, $usersCollection);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);

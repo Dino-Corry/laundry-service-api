@@ -1,18 +1,18 @@
 # Laundry Service API
 
-#### The Laundry Service API is a PHP-based API that provides functionality for a laundry service application. It includes features such as user authentication (signup, login, forgot password, reset password), handling pickup requests, checking item status, and administrative actions like approving pickup requests. The API utilizes MongoDB as the database for storing user and request information. It also integrates with the PHPMailer library for sending email notifications to users.
+#### The Laundry Service API is a PHP-based API that provides functionality for a laundry service application. It includes features such as user authentication (signup, login, forgot password, reset password), handling pickup requests, checking item status, and administrative actions like approving pickup requests etc. The API utilizes MongoDB as the database for storing user and request information. It also integrates with the PHPMailer library for sending email notifications to users and dispatched rider to pickup item and deliver as well when ready.
 
 
 
 Class: LaundryServiceAPI
 
-Constructor: __construct($mongoHost, $dbName, $mongoCollection)
+Constructor: __construct($mongoHost, $dbName, $adminCollection, $usersCollection, $driversCollection)
             Initializes the MongoDB connection and sets the collection.
 
 Method: 
     signup($name, $email, $password)
         -Creates a new user account with the provided name, email, and password.
-        -Stores the user's information in the MongoDB collection.
+        -Stores the user's information in the users collection.
         -Returns the inserted user's ID.
 
 Method: 
@@ -31,10 +31,6 @@ Method:
         -Verifies the reset token and updates the user's password in the collection.
         -Returns true if the password is reset successfully; otherwise, returns false.
 
-Method: 
-    findAllUsers()
-        -Retrieves all users from the MongoDB collection.
-        -Returns an array containing the user documents.
 
 Method: 
     getItemStatus($requestNumber)
@@ -42,14 +38,9 @@ Method:
         -Returns an array with information about the pickup request, including the number of items, amount, status, pickup date, and user email.
         -Returns 'Item not found' if the request number is not found.
 
-Method:    
-    adminHandler($requestNumber, $status)
-        -Handles approval status changes by the admin for a pickup request.
-        -Updates the status of the pickup request identified by the request number in the MongoDB collection.
-        -Returns a message indicating the approval status change or an error message if the request is not found or the status is incorrect.
 
 Method: 
-    makePickupRequest($userId, $numberOfItem)
+    makePickupRequest($userId, $numberOfItem, $phone, $pickupAddress)
         -Creates a new pickup request for a user with the provided user ID and the number of items.
         -Generates a request number, calculates the amount, and sets the pickup date and initial status.
         -Adds the pickup request to the user's document in the MongoDB collection.
@@ -67,3 +58,26 @@ Method:
         -Accepts the HTTP method (GET, POST, etc.), endpoint, and request data as parameters.
         -Returns the result of the corresponding API method as JSON-encoded data.
         -The API supports the following endpoints and corresponding HTTP methods:
+
+        The API supports the following endpoints and corresponding HTTP methods:
+
+            Endpoint: /users
+
+            Method: POST
+            Description: Creates a new user account
+            Parameters: name, email, password
+            Endpoint: /login
+
+            Method: POST
+            Description: Authenticates a user
+            Parameters: email, password
+            Endpoint: /forgot-password
+
+            Method: POST
+            Description: Sends a password reset token via email
+            Parameters: email
+            Endpoint: /reset-password
+
+            Method: POST
+            Description: Resets a user's password
+            Parameters: email, `resetToken
