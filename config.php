@@ -1,5 +1,7 @@
 <?php
 use MongoDB\Driver\ServerApi;
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
 require 'vendor/autoload.php'; 
 
 
