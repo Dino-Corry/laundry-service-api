@@ -12,16 +12,9 @@ class LaundryServiceAPI{
     private $collection;
 
     public function __construct($dbName, $usersCollection){
-        // $mongoConnectionString = "mongodb://$mongoHost";
-        // // $mongoConnectionString = "mongodb+srv://essen653:Dino-boy123@cluster0.pckoqai.mongodb.net/laundry_service?retryWrites=true&w=majority";
-        // $this->mongoClient = new Client($mongoConnectionString);
         $this->mongoClient = server($dbName, $usersCollection); 
-
-        // if ($userCollection =$this->mongoClient->listCollections(["name"=>$usersCollection])) {
-            $this->collection = $this->mongoClient->$usersCollection;            
-        // } else {
-        //     $this->collection = $this->mongoClient->createCollection($usersCollection);
-        // }              
+        $this->collection = $this->mongoClient->$usersCollection;            
+                    
     }
 
     // User authentication: Signup
@@ -424,7 +417,7 @@ $data = $_POST;
 $response = $api->handleRequest($method, $endpoint, $data);
 
 // Set the appropriate headers
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 
 // Send the response
 echo json_encode($response);
