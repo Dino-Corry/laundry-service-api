@@ -1,11 +1,8 @@
 <?php
-
+use MongoDB\Client;
 use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
-require_once 'config.php';
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php'; 
 
 
 
@@ -14,12 +11,13 @@ class LaundryServiceAPI{
     private $mongoClient;
     private $collection;
 
-    public function __construct($dbName, $usersCollection){
-        $this->mongoClient = server($dbName, $usersCollection); 
-        $this->collection = $this->mongoClient->$usersCollection;            
-                    
+    public function __construct($mongoHost, $dbName, $usersCollection){
+        $mongoConnectionString = "mongodb://$mongoHost";
+        $this->mongoClient = new Client($mongoConnectionString);
+        $this->collection = $this->mongoClient->$dbName->$usersCollection;
     }
 
+    // User authentication: Signup
     // User authentication: Signup
     public function signup($name, $email, $password, $phone){
         // Check if the email already exists
@@ -310,9 +308,6 @@ class LaundryServiceAPI{
                 if ($method === 'POST') {
                     if (isset($data['name']) && ($data['email']) && ($data['password'])) { 
                         $email = $data['email'];
-                        // $manager = new MongoDB\Driver\Manager("mongodb://primehomecare.ca/api:27017");
-                        // var_dump($manager);
-                        // die(var_dump($this->mongoClient));
 
                         // Check if email already exists
                         $existingUser = $this->collection->findOne(['email' => $email]);
@@ -399,27 +394,20 @@ class LaundryServiceAPI{
                 return 'Invalid endpoint';
         }
     }
+    //
     
 }
 
-
 // MongoDB configuration
+$mongoHost = 'mongodb+srv://dino:Dino-boy123@cluster0.ddqzrq5.mongodb.net/laundry_service';
 $dbName = 'laundry_service';
 $usersCollection = 'users';
 
-
-$api = new LaundryServiceAPI($dbName, $usersCollection);
+$api = new LaundryServiceAPI($mongoHost, $dbName, $usersCollection);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);
 $endpoint = rtrim($endpoint, '/');
-
-// $method = $_SERVER['REQUEST_METHOD'];
-// $uro = $_SERVER['REQUEST_URI'];
-// $parts = explode('?', $uro, 2); // Remove query parameters
-// $endpoint = $parts[0];
-
-
 
 $data = $_POST; 
 
@@ -434,4 +422,4 @@ header('Content-Type: application/json');
 
 // Send the response
 echo json_encode($response);
-
+?>
