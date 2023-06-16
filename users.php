@@ -144,34 +144,6 @@ class LaundryServiceAPI{
                         'user_email' => $userEmail
                     ];
                     return $itemDetails;
-                    // if ($status == 1) {
-                    //     $itemDetails = [
-                    //         'number_of_item' => $numberOfItem,
-                    //         'amount' => $amount,
-                    //         'status' => "Your item has been approved for pickup. Dispatch driver will call you for pickup",
-                    //         'user_email' => $userEmail
-                    //     ];
-    
-                    //     return $itemDetails;
-                    // } elseif ($status == 2) {
-                    //     $itemDetails = [
-                    //         'number_of_item' => $numberOfItem,
-                    //         'amount' => $amount,
-                    //         'status' => "Your item is now ready for delivery, wait for our call",
-                    //         'user_email' => $userEmail
-                    //     ];
-    
-                    //     return $itemDetails;
-                    // } else {
-                    //     $itemDetails = [
-                    //         'number_of_item' => $numberOfItem,
-                    //         'amount' => $amount,
-                    //         'status' => "Pickup request is still pending",
-                    //         'user_email' => $userEmail
-                    //     ];
-    
-                    //     return $itemDetails;
-                    // }
                 }
             }
         }
@@ -336,6 +308,8 @@ class LaundryServiceAPI{
                     } else {
                         return 'Missing parameters'; 
                     }
+                } else {
+                    return "Invalid request methods.";
                 }
                 break;
             case '/login':
@@ -349,7 +323,7 @@ class LaundryServiceAPI{
                             return 'Login was successful';
                         } else {
                             // Request not found or unable to approve
-                            return 'Failed to login';
+                            return 'email or password is incorrect.';
                         }
                     } else {
                         return 'Missing parameters'; 
@@ -414,16 +388,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);
 $endpoint = rtrim($endpoint, '/');
 
-// $method = $_SERVER['REQUEST_METHOD'];
-// $uro = $_SERVER['REQUEST_URI'];
-// $parts = explode('?', $uro, 2); // Remove query parameters
-// $endpoint = $parts[0];
-
 
 
 $data = $_POST; 
-
-
 
 // Handle the request
 // var_dump($data);
