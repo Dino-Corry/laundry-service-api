@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 // use PHPMailer\PHPMailer\Exception;
 require_once 'config.php';
 // error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 
 
 
@@ -240,6 +240,8 @@ class LaundryServiceAPI{
 
     //Handle all end-points
     public function handleRequest($method, $endpoint, $data){
+        return "test";
+        /*
         // echo $endpoint;
         switch ($endpoint) {
             case '/getItemStatus':
@@ -280,6 +282,7 @@ class LaundryServiceAPI{
                 break;
             case '/signup':
                 if ($method === 'POST') {
+                    
                     if (isset($data['name']) && ($data['email']) && ($data['password'])) { 
                         $email = $data['email'];
                         // $manager = new MongoDB\Driver\Manager("mongodb://primehomecare.ca/api:27017");
@@ -372,6 +375,7 @@ class LaundryServiceAPI{
             default:
                 return 'Invalid endpoint';
         }
+        */
     }
     
 }
