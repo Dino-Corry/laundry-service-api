@@ -1,19 +1,18 @@
 <?php
-require 'vendor/autoload.php'; 
-use MongoDB\Client;
+require_once 'config.php';
 
-class AdminHandler{
+class LaundryServiceAPI{
+    private $mongoClient;
     private $aCollection;
     private $uCollection;
     private $dCollection;
 
-    public function __construct($mongoHost, $dbName, $adminCollection, $usersCollection, $driversCollection)
-    {
-        $mongoConnectionString = "mongodb://$mongoHost";
-        $mongoClient = new Client($mongoConnectionString);
-        $this->aCollection = $mongoClient->$dbName->$adminCollection;
-        $this->uCollection = $mongoClient->$dbName->$usersCollection;
-        $this->dCollection = $mongoClient->$dbName->$driversCollection;
+    public function __construct($dbName, $adminCollection, $usersCollection, $driversCollection){
+        $this->mongoClient = server($dbName, $usersCollection, $adminCollection, $driversCollection); 
+        $this->uCollection = $this->mongoClient->$usersCollection;
+        $this->aCollection = $this->mongoClient->$adminCollection;  
+        $this->dCollection = $this->mongoClient->$driversCollection;          
+                    
     }
 
     // User authentication: Signup
@@ -404,13 +403,12 @@ class AdminHandler{
 
 
 // MongoDB configuration
-$mongoHost = 'localhost';
 $dbName = 'laundry_service';
 $adminCollection = 'admin';
 $usersCollection = 'users';
 $driversCollection = 'driver';
 
-$api = new AdminHandler($mongoHost, $dbName, $adminCollection, $usersCollection, $driversCollection);
+$api = new LaundryServiceAPI($dbName, $adminCollection, $usersCollection, $driversCollection );
 
 $method = $_SERVER['REQUEST_METHOD'];
 $endpoint = parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);

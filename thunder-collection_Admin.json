@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "Admin",
-    "dateExported": "2023-06-12T11:32:19.231Z",
+    "dateExported": "2023-06-20T16:09:45.980Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -10,11 +10,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "Add Rider",
-            "url": "http://localhost/laundry-service-api/admin.php/addDriver",
+            "url": "http://localhost/laundry-service/admin.php/addDriver",
             "method": "POST",
             "sortNum": 5000,
             "created": "2023-06-12T09:05:06.274Z",
-            "modified": "2023-06-12T09:13:07.157Z",
+            "modified": "2023-06-14T14:51:57.509Z",
             "headers": [],
             "params": [],
             "body": {
@@ -23,15 +23,15 @@
                 "form": [
                     {
                         "name": "name",
-                        "value": ""
+                        "value": "Corry Driver"
                     },
                     {
                         "name": "phone",
-                        "value": ""
+                        "value": "08163650607"
                     },
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "e.ssen653@gmail.com"
                     }
                 ]
             },
@@ -42,11 +42,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "Approve Request",
-            "url": "http://localhost/laundry-service-api/admin.php/approveRequest",
+            "url": "http://localhost/laundry-service/admin.php/approveRequest",
             "method": "POST",
             "sortNum": 7500,
             "created": "2023-06-11T22:04:18.730Z",
-            "modified": "2023-06-12T11:13:59.215Z",
+            "modified": "2023-06-14T14:52:04.443Z",
             "headers": [],
             "params": [],
             "body": {
@@ -55,11 +55,11 @@
                 "form": [
                     {
                         "name": "requestNumber",
-                        "value": ""
+                        "value": "236B2A"
                     },
                     {
                         "name": "adminID",
-                        "value": ""
+                        "value": "6485d44d1a0b3021ca0978d6"
                     }
                 ]
             },
@@ -70,11 +70,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "Item Ready",
-            "url": "http://localhost/laundry-service-api/admin.php/readyForDelivery",
+            "url": "http://localhost/laundry-service/admin.php/readyForDelivery",
             "method": "POST",
             "sortNum": 8750,
             "created": "2023-06-12T11:16:33.219Z",
-            "modified": "2023-06-12T11:17:53.547Z",
+            "modified": "2023-06-14T14:52:11.079Z",
             "headers": [],
             "params": [],
             "body": {
@@ -83,11 +83,11 @@
                 "form": [
                     {
                         "name": "requestNumber",
-                        "value": ""
+                        "value": "236B2A"
                     },
                     {
                         "name": "adminID",
-                        "value": ""
+                        "value": "6485d44d1a0b3021ca0978d6"
                     }
                 ]
             },
@@ -98,11 +98,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "Delete User",
-            "url": "http://localhost/laundry-service-api/admin.php/deleteUser",
+            "url": "http://localhost/laundry-service/admin.php/deleteUser",
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-06-11T11:49:04.491Z",
-            "modified": "2023-06-12T10:35:14.696Z",
+            "modified": "2023-06-14T14:52:18.123Z",
             "headers": [],
             "params": [],
             "body": {
@@ -111,7 +111,7 @@
                 "form": [
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "essen65.3@gmail.com"
                     }
                 ]
             },
@@ -122,11 +122,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "All Users",
-            "url": "http://localhost/laundry-service-api/admin.php/findAllUsers",
+            "url": "http://localhost/laundry-service/admin.php/findAllUsers",
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-11T12:42:51.188Z",
-            "modified": "2023-06-11T12:43:06.907Z",
+            "modified": "2023-06-14T14:52:25.557Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -136,11 +136,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "All Admin",
-            "url": "http://localhost/laundry-service-api/admin.php/findAllAdmin",
+            "url": "http://localhost/laundry-service/admin.php/findAllAdmin",
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-11T13:58:33.168Z",
-            "modified": "2023-06-11T13:59:36.661Z",
+            "modified": "2023-06-14T14:52:32.940Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -150,11 +150,11 @@
             "colId": "3ef2d629-4690-4435-9ac2-8872eac6daa9",
             "containerId": "",
             "name": "Admin Signup",
-            "url": "http://localhost/laundry-service-api/admin.php/signup",
+            "url": "http://localhost/laundry-service/admin.php/signup",
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-11T14:04:25.326Z",
-            "modified": "2023-06-11T14:06:34.094Z",
+            "modified": "2023-06-14T14:52:40.320Z",
             "headers": [],
             "params": [],
             "body": {
@@ -163,15 +163,15 @@
                 "form": [
                     {
                         "name": "name",
-                        "value": ""
+                        "value": "admin"
                     },
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "admin@email.com"
                     },
                     {
                         "name": "password",
-                        "value": ""
+                        "value": "admin"
                     }
                 ]
             },

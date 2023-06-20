@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "Users",
-    "dateExported": "2023-06-12T11:31:57.727Z",
+    "dateExported": "2023-06-20T16:09:31.342Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -10,11 +10,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Signup",
-            "url": "http://localhost/laundry-service-api/users.php/signup",
+            "url": "https://primehomecare.ca/api/users.php/signu",
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-06-11T02:04:19.232Z",
-            "modified": "2023-06-12T10:01:10.528Z",
+            "modified": "2023-06-16T13:52:40.077Z",
             "headers": [],
             "params": [],
             "body": {
@@ -23,19 +23,19 @@
                 "form": [
                     {
                         "name": "name",
-                        "value": ""
+                        "value": "Dino Corry"
                     },
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "essen.653@g.mail.com"
                     },
                     {
                         "name": "password",
-                        "value": ""
+                        "value": "12345"
                     },
                     {
                         "name": "phone",
-                        "value": ""
+                        "value": "08165479255"
                     }
                 ]
             },
@@ -46,11 +46,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Login",
-            "url": "http://localhost/laundry-service-api/users.php/login",
+            "url": "http://localhost/laundry-service/users.php/login",
             "method": "POST",
             "sortNum": 15000,
             "created": "2023-06-11T09:32:15.477Z",
-            "modified": "2023-06-11T09:32:43.884Z",
+            "modified": "2023-06-14T14:51:13.506Z",
             "headers": [],
             "params": [],
             "body": {
@@ -59,11 +59,11 @@
                 "form": [
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "essen653@yahoo.com"
                     },
                     {
                         "name": "password",
-                        "value": ""
+                        "value": "12345"
                     }
                 ]
             },
@@ -74,11 +74,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Request for Pickup",
-            "url": "http://localhost/laundry-service-api/users.php/makePickupRequest",
+            "url": "http://localhost/laundry-service/users.php/makePickupRequest",
             "method": "POST",
             "sortNum": 16250,
             "created": "2023-06-11T10:09:39.489Z",
-            "modified": "2023-06-12T10:36:03.721Z",
+            "modified": "2023-06-14T14:51:22.355Z",
             "headers": [],
             "params": [],
             "body": {
@@ -87,19 +87,19 @@
                 "form": [
                     {
                         "name": "userID",
-                        "value": ""
+                        "value": "6486ed531a0b3021ca0978da"
                     },
                     {
                         "name": "numberOfItem",
-                        "value": ""
+                        "value": "7"
                     },
                     {
                         "name": "phone",
-                        "value": ""
+                        "value": "08163650608"
                     },
                     {
                         "name": "pickupAddress",
-                        "value": ""
+                        "value": "Elelenwo PH"
                     }
                 ]
             },
@@ -110,11 +110,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Check Item Status",
-            "url": "http://localhost/laundry-service-api/users.php/getItemStatus",
+            "url": "http://localhost/laundry-service/users.php/getItemStatus",
             "method": "POST",
             "sortNum": 16875,
             "created": "2023-06-11T11:19:55.032Z",
-            "modified": "2023-06-12T10:45:05.033Z",
+            "modified": "2023-06-14T14:51:31.103Z",
             "headers": [],
             "params": [],
             "body": {
@@ -123,7 +123,7 @@
                 "form": [
                     {
                         "name": "requestNumber",
-                        "value": ""
+                        "value": "236B2A"
                     }
                 ]
             },
@@ -134,11 +134,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Forgot Password",
-            "url": "http://localhost/laundry-service-api/users.php/forgotPassword",
+            "url": "http://localhost/laundry-service/users.php/forgotPassword",
             "method": "POST",
             "sortNum": 17500,
             "created": "2023-06-11T09:57:07.239Z",
-            "modified": "2023-06-11T10:01:32.335Z",
+            "modified": "2023-06-14T14:51:38.768Z",
             "headers": [],
             "params": [],
             "body": {
@@ -147,7 +147,7 @@
                 "form": [
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "essen653@yahoo.com"
                     }
                 ]
             },
@@ -158,11 +158,11 @@
             "colId": "ce675fbf-94fa-4a1f-b6b5-43d8b846730d",
             "containerId": "",
             "name": "Reset Password",
-            "url": "http://localhost/laundry-service-api/users.php/resetPassword",
+            "url": "http://localhost/laundry-service/users.php/resetPassword",
             "method": "POST",
             "sortNum": 18750,
             "created": "2023-06-11T10:02:01.299Z",
-            "modified": "2023-06-11T10:03:44.977Z",
+            "modified": "2023-06-14T14:51:45.922Z",
             "headers": [],
             "params": [],
             "body": {
@@ -171,15 +171,15 @@
                 "form": [
                     {
                         "name": "email",
-                        "value": ""
+                        "value": "essen653@yahoo.com"
                     },
                     {
                         "name": "resetToken",
-                        "value": ""
+                        "value": "5439539"
                     },
                     {
                         "name": "newPassword",
-                        "value": ""
+                        "value": "12345"
                     }
                 ]
             },
